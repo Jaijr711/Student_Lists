@@ -1,0 +1,298 @@
+:root {
+    --school-primary: #002147; /* Navy Blue */
+    --school-secondary: #FFD700; /* Gold */
+    --school-accent: #0056b3;
+    --text-dark: #333333;
+    --bg-light: #f4f6f9;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Animations */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Modal / Floating Form Styles */
+#formSection, #deleteModal, #warningModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    background-color: rgba(0, 33, 71, 0.4); /* Navy tinted backdrop */
+    backdrop-filter: blur(2px); /* Subtle backdrop blur for modern browsers */
+    display: none; /* Flex when active */
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    overflow-y: auto; /* Allow scrolling if form is too tall */
+}
+
+/* Container for the card inside the modal */
+#formSection > .row {
+    width: 100%;
+    max-width: 600px;
+    margin: auto; /* Center in the flex container */
+    transition: all 0.3s ease-in-out;
+}
+
+#warningModal {
+    z-index: 2100; /* Sit above the form (2000) */
+}
+
+#loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3000; /* Sit above everything */
+    background-color: rgba(255, 255, 255, 0.9); /* Opaque white bg */
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Blur Effect for Background Content */
+.blur-background {
+    filter: blur(5px);
+    pointer-events: none; /* Prevent clicks on background */
+    user-select: none;
+    transition: filter 0.3s ease;
+}
+
+/* Ensure List Section transitions smoothly */
+#listSection {
+    transition: filter 0.3s ease;
+}
+
+/* Navbar Customization */
+.bg-school-primary {
+    background-color: var(--school-primary) !important;
+}
+
+.navbar-brand .fs-6 {
+    opacity: 0.8;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.5px;
+}
+
+/* Card Styling */
+.card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+}
+
+.card-header {
+    background-color: transparent;
+}
+
+/* Form Styling */
+.form-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--school-accent);
+    box-shadow: 0 0 0 0.2rem rgba(0, 86, 179, 0.15);
+}
+
+/* Button Customization */
+.btn-school-primary {
+    background-color: var(--school-primary);
+    color: white;
+    border: none;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-school-primary:hover {
+    background-color: var(--school-accent);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.btn-warning {
+    color: #fff;
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+/* Table Customization */
+.custom-table thead th {
+    background-color: #f8f9fa;
+    color: var(--school-primary);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid #e9ecef;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    white-space: nowrap;
+    
+    /* Sticky Header */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+.custom-table tbody tr {
+    transition: background-color 0.2s;
+}
+
+.custom-table tbody tr:hover {
+    background-color: rgba(0, 33, 71, 0.03);
+}
+
+/* Minor Highlight - Refined */
+.table-minor {
+    position: relative;
+}
+
+.table-minor td:first-child {
+    border-left: 4px solid var(--school-secondary);
+}
+
+/* Badge Minor */
+.badge-minor {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 0.25em 0.6em;
+    font-size: 0.75em;
+    border-radius: 10rem;
+    margin-left: 0.5rem;
+    border: 1px solid #ffeeba;
+}
+
+/* Action Buttons */
+.btn-action {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.btn-action:hover {
+    transform: scale(1.1);
+}
+
+/* Empty State */
+#emptyState {
+    display: none; /* Toggled via JS */
+}
+
+/* Utility to ensure table is always readable on mobile via scroll */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* =========================================
+   Mobile Optimization (Readable Table)
+   ========================================= */
+@media (max-width: 768px) {
+    /* Stack Header Elements */
+    .card-header .d-flex {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+    
+    .card-header .d-flex .d-flex {
+        /* Reset the inner button container to row but center/stretch it */
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 0.5rem;
+    }
+
+    #addNewBtn {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    /* Table Compactness */
+    .custom-table th, 
+    .custom-table td {
+        padding: 0.75rem 0.5rem; /* Reduce horizontal padding */
+        font-size: 0.85rem;      /* Slightly smaller text */
+        white-space: nowrap;     /* Prevent awkward wrapping */
+    }
+
+    /* Allow Name and Course to wrap if needed for context */
+    .custom-table td:nth-child(2), /* Name */
+    .custom-table td:nth-child(4) { /* Course */
+        white-space: normal;
+        min-width: 120px;
+    }
+
+    /* Justify Course Text Specifically */
+    .custom-table td:nth-child(4) { /* Course */
+        text-align: justify;
+    }
+    
+    /* Action buttons smaller */
+    .btn-action {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+    
+    /* Adjust Badge size */
+    .badge {
+        font-weight: normal;
+        font-size: 0.7em !important;
+        white-space: normal; /* Allow badge text to wrap if needed */
+        display: inline-block;
+        line-height: 1.2;
+    }
+
+    /* Full Screen Modal on Mobile */
+    #formSection {
+        padding: 0 !important;
+        align-items: flex-end; /* Slide up or just cover */
+    }
+
+    #formSection > .row {
+        max-width: 100%;
+        margin: 0;
+        height: 100%; /* Occupy full height */
+    }
+
+    #formSection .card {
+        border-radius: 0; /* Remove corners */
+        height: 100%;
+        overflow-y: auto; /* Internal scrolling */
+        box-shadow: none;
+    }
+    
+    #formSection .card-header {
+        position: sticky;
+        top: 0;
+        background-color: white;
+        z-index: 5;
+        border-bottom: 1px solid #e9ecef;
+    }
+}
+
