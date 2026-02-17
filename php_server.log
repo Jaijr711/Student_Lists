@@ -1,0 +1,70 @@
+[Tue Feb 17 22:57:12 2026] PHP 8.3.6 Development Server (http://localhost:8000) started
+[Tue Feb 17 22:58:08 2026] [::1]:38134 Accepted
+[Tue Feb 17 22:58:08 2026] [::1]:38134 [200]: GET /
+[Tue Feb 17 22:58:08 2026] [::1]:38134 Closing
+[Tue Feb 17 22:58:08 2026] [::1]:49760 Accepted
+[Tue Feb 17 22:58:08 2026] [::1]:49774 Accepted
+[Tue Feb 17 22:58:08 2026] [::1]:49760 [200]: GET /style.css
+[Tue Feb 17 22:58:08 2026] [::1]:49774 [200]: GET /script.js
+[Tue Feb 17 22:58:08 2026] [::1]:49760 Closing
+[Tue Feb 17 22:58:08 2026] [::1]:49774 Closing
+[Tue Feb 17 22:58:08 2026] [::1]:49780 Accepted
+[Tue Feb 17 22:58:08 2026] [::1]:49780 [200]: POST /api.php
+[Tue Feb 17 22:58:08 2026] [::1]:49780 Closing
+[Tue Feb 17 22:58:09 2026] [::1]:49792 Accepted
+[Tue Feb 17 22:58:09 2026] [::1]:49792 [200]: POST /api.php
+[Tue Feb 17 22:58:09 2026] [::1]:49792 Closing
+[Tue Feb 17 22:58:09 2026] [::1]:49798 Accepted
+[Tue Feb 17 22:58:09 2026] [::1]:49814 Accepted
+[Tue Feb 17 22:58:09 2026] [::1]:49818 Accepted
+[Tue Feb 17 22:58:09 2026] [::1]:49798 [200]: POST /api.php
+[Tue Feb 17 22:58:09 2026] [::1]:49798 Closing
+[Tue Feb 17 22:58:09 2026] [::1]:49826 Accepted
+[Tue Feb 17 22:58:09 2026] [::1]:49840 Accepted
+[Tue Feb 17 22:58:09 2026] [::1]:49814 [200]: POST /api.php
+[Tue Feb 17 22:58:09 2026] [::1]:49814 Closing
+[Tue Feb 17 22:58:09 2026] [::1]:49826 [200]: POST /api.php
+[Tue Feb 17 22:58:09 2026] [::1]:49826 Closing
+[Tue Feb 17 22:58:09 2026] [::1]:49818 [200]: POST /api.php
+[Tue Feb 17 22:58:09 2026] [::1]:49818 Closing
+[Tue Feb 17 22:58:09 2026] [::1]:49840 [200]: POST /api.php
+[Tue Feb 17 22:58:09 2026] [::1]:49840 Closing
+[Tue Feb 17 22:58:13 2026] [::1]:49846 Accepted
+[Tue Feb 17 22:58:13 2026] [::1]:49846 [200]: POST /api.php
+[Tue Feb 17 22:58:13 2026] [::1]:49846 Closing
+[Tue Feb 17 22:58:14 2026] [::1]:49848 Accepted
+[Tue Feb 17 22:58:14 2026] [::1]:49848 [200]: POST /api.php
+[Tue Feb 17 22:58:14 2026] [::1]:49848 Closing
+[Tue Feb 17 22:58:14 2026] [::1]:49862 Accepted
+[Tue Feb 17 22:58:14 2026] [::1]:49862 [200]: POST /api.php
+[Tue Feb 17 22:58:14 2026] [::1]:49862 Closing
+[Tue Feb 17 22:59:11 2026] [::1]:49020 Accepted
+[Tue Feb 17 22:59:11 2026] [::1]:49020 [200]: GET /
+[Tue Feb 17 22:59:11 2026] [::1]:49020 Closing
+[Tue Feb 17 22:59:11 2026] [::1]:49030 Accepted
+[Tue Feb 17 22:59:11 2026] [::1]:49038 Accepted
+[Tue Feb 17 22:59:11 2026] [::1]:49030 [200]: GET /style.css
+[Tue Feb 17 22:59:11 2026] [::1]:49038 [200]: GET /script.js
+[Tue Feb 17 22:59:11 2026] [::1]:49030 Closing
+[Tue Feb 17 22:59:11 2026] [::1]:49038 Closing
+[Tue Feb 17 22:59:11 2026] [::1]:49048 Accepted
+[Tue Feb 17 22:59:11 2026] [::1]:49048 [200]: POST /api.php
+[Tue Feb 17 22:59:11 2026] [::1]:49048 Closing
+[Tue Feb 17 22:59:11 2026] [::1]:49056 Accepted
+[Tue Feb 17 22:59:12 2026] [::1]:49056 [200]: POST /api.php
+[Tue Feb 17 22:59:12 2026] [::1]:49056 Closing
+[Tue Feb 17 22:59:12 2026] [::1]:49072 Accepted
+[Tue Feb 17 22:59:12 2026] [::1]:49088 Accepted
+[Tue Feb 17 22:59:12 2026] [::1]:49092 Accepted
+[Tue Feb 17 22:59:12 2026] [::1]:49106 Accepted
+[Tue Feb 17 22:59:12 2026] [::1]:49072 [200]: POST /api.php
+[Tue Feb 17 22:59:12 2026] [::1]:49072 Closing
+[Tue Feb 17 22:59:12 2026] [::1]:49114 Accepted
+[Tue Feb 17 22:59:12 2026] [::1]:49088 [200]: POST /api.php
+[Tue Feb 17 22:59:12 2026] [::1]:49088 Closing
+[Tue Feb 17 22:59:12 2026] [::1]:49092 [200]: POST /api.php
+[Tue Feb 17 22:59:12 2026] [::1]:49092 Closing
+[Tue Feb 17 22:59:12 2026] [::1]:49106 [200]: POST /api.php
+[Tue Feb 17 22:59:12 2026] [::1]:49106 Closing
+[Tue Feb 17 22:59:12 2026] [::1]:49114 [200]: POST /api.php
+[Tue Feb 17 22:59:12 2026] [::1]:49114 Closing
