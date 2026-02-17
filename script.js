@@ -180,8 +180,8 @@ function checkSession() {
 
 function handleLogin(e) {
     e.preventDefault();
-    const username = document.getElementById('loginUsername').value;
-    const password = document.getElementById('loginPassword').value;
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
 
     fetch('api.php', {
         method: 'POST',
