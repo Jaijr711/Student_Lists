@@ -296,3 +296,83 @@ body {
     }
 }
 
+/* =========================================
+   New Dashboard Styles (PHP Version)
+   ========================================= */
+
+/* Dashboard Cards */
+.dashboard-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    height: 100%;
+    border: none;
+}
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+.icon-box {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2.5rem;
+}
+
+/* Connector Lines (Dashboard) */
+.step-connector {
+    position: relative;
+}
+.step-connector::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -15px;
+    width: 30px;
+    height: 2px;
+    background-color: #dee2e6;
+    z-index: -1;
+}
+@media (max-width: 768px) {
+    .step-connector::after {
+        display: none;
+    }
+}
+
+/* Attendance Status Radio Buttons */
+.status-radio {
+    display: none;
+}
+.status-label {
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    margin-right: 0.25rem;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    min-width: 30px;
+    display: inline-block;
+    text-align: center;
+}
+.status-radio:checked + .status-label.present {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border-color: #badbcc;
+    font-weight: bold;
+}
+.status-radio:checked + .status-label.absent {
+    background-color: #f8d7da;
+    color: #842029;
+    border-color: #f5c2c7;
+    font-weight: bold;
+}
+.status-radio:checked + .status-label.late {
+    background-color: #fff3cd;
+    color: #664d03;
+    border-color: #ffecb5;
+    font-weight: bold;
+}
