@@ -1,298 +1,52 @@
-:root {
-    --school-primary: #002147; /* Navy Blue */
-    --school-secondary: #FFD700; /* Gold */
-    --school-accent: #0056b3;
-    --text-dark: #333333;
-    --bg-light: #f4f6f9;
-}
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@300;400;500;600&display=swap');
 
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: var(--bg-light);
-    color: var(--text-dark);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:'Figtree',sans-serif;background:#05090f;color:#cdd9ec;min-height:100vh;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:#080d18;}
+::-webkit-scrollbar-thumb{background:#162b4a;border-radius:3px;}
 
-/* Animations */
-.fade-in {
-    animation: fadeIn 0.3s ease-in-out;
-}
+@keyframes fadeUp{from{opacity:0;transform:translateY(13px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes pop{0%{transform:scale(0)}65%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes slideR{from{transform:translateX(50px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(56,189,248,.4)}50%{box-shadow:0 0 0 6px rgba(56,189,248,0)}}
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+.a1{animation:fadeUp .4s .04s both}.a2{animation:fadeUp .4s .10s both}.a3{animation:fadeUp .4s .17s both}
+.a4{animation:fadeUp .4s .24s both}.a5{animation:fadeUp .4s .31s both}.a6{animation:fadeUp .4s .38s both}
 
-/* Modal / Floating Form Styles */
-#formSection, #deleteModal, #warningModal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2000;
-    background-color: rgba(0, 33, 71, 0.4); /* Navy tinted backdrop */
-    backdrop-filter: blur(2px); /* Subtle backdrop blur for modern browsers */
-    display: none; /* Flex when active */
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    overflow-y: auto; /* Allow scrolling if form is too tall */
-}
+.btn{cursor:pointer;border:none;font-family:'Figtree',sans-serif;font-weight:600;transition:all .16s ease;}
+.btn:active{transform:scale(.96);}
+.btn:disabled{opacity:.45;cursor:not-allowed;}
 
-/* Container for the card inside the modal */
-#formSection > .row {
-    width: 100%;
-    max-width: 600px;
-    margin: auto; /* Center in the flex container */
-    transition: all 0.3s ease-in-out;
-}
+label{display:block;font-family:'Fira Code',monospace;font-size:10px;font-weight:500;
+  letter-spacing:.09em;text-transform:uppercase;color:#2e4a6a;margin-bottom:5px;}
+input,select,textarea{width:100%;padding:9px 12px;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08);border-radius:7px;color:#cdd9ec;font-size:13px;
+  font-family:'Figtree',sans-serif;outline:none;transition:border-color .18s;}
+input:focus,select:focus,textarea:focus{border-color:rgba(56,189,248,.4);}
+select option{background:#0a1525;}
 
-#warningModal {
-    z-index: 2100; /* Sit above the form (2000) */
-}
+table{border-collapse:collapse;width:100%;}
+th{padding:8px 13px;text-align:left;font-family:'Fira Code',monospace;font-size:9.5px;
+  font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#2e4a6a;
+  background:rgba(5,9,15,.95);border-bottom:1px solid rgba(255,255,255,.05);}
+td{padding:9px 13px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle;}
+tr:hover td{background:rgba(56,189,248,.035);}
 
-#loadingOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 3000; /* Sit above everything */
-    background-color: rgba(255, 255, 255, 0.9); /* Opaque white bg */
-    backdrop-filter: blur(5px);
-    display: none;
-    align-items: center;
-    justify-content: center;
-}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;
+  font-size:10px;font-weight:700;font-family:'Fira Code',monospace;}
+.t-sky{background:rgba(56,189,248,.11);color:#38bdf8;border:1px solid rgba(56,189,248,.2);}
+.t-grn{background:rgba(52,211,153,.11);color:#34d399;border:1px solid rgba(52,211,153,.2);}
+.t-amb{background:rgba(251,191,36,.11);color:#fbbf24;border:1px solid rgba(251,191,36,.2);}
+.t-red{background:rgba(251,113,133,.11);color:#fb7185;border:1px solid rgba(251,113,133,.2);}
+.t-vio{background:rgba(167,139,250,.11);color:#a78bfa;border:1px solid rgba(167,139,250,.2);}
+.t-slt{background:rgba(100,116,139,.1);color:#94a3b8;border:1px solid rgba(100,116,139,.2);}
+.t-rose{background:rgba(244,63,94,.11);color:#f43f5e;border:1px solid rgba(244,63,94,.2);}
 
-/* Blur Effect for Background Content */
-.blur-background {
-    filter: blur(5px);
-    pointer-events: none; /* Prevent clicks on background */
-    user-select: none;
-    transition: filter 0.3s ease;
-}
-
-/* Ensure List Section transitions smoothly */
-#listSection {
-    transition: filter 0.3s ease;
-}
-
-/* Navbar Customization */
-.bg-school-primary {
-    background-color: var(--school-primary) !important;
-}
-
-.navbar-brand .fs-6 {
-    opacity: 0.8;
-    font-size: 0.75rem !important;
-    letter-spacing: 0.5px;
-}
-
-/* Card Styling */
-.card {
-    border-radius: 12px;
-    overflow: hidden;
-    transition: transform 0.2s ease-in-out;
-}
-
-.card-header {
-    background-color: transparent;
-}
-
-/* Form Styling */
-.form-label {
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-}
-
-.form-control:focus, .form-select:focus {
-    border-color: var(--school-accent);
-    box-shadow: 0 0 0 0.2rem rgba(0, 86, 179, 0.15);
-}
-
-/* Button Customization */
-.btn-school-primary {
-    background-color: var(--school-primary);
-    color: white;
-    border: none;
-    font-weight: 500;
-    transition: all 0.3s;
-}
-
-.btn-school-primary:hover {
-    background-color: var(--school-accent);
-    color: white;
-    transform: translateY(-1px);
-}
-
-.btn-warning {
-    color: #fff;
-    background-color: #ffc107;
-    border-color: #ffc107;
-}
-
-/* Table Customization */
-.custom-table thead th {
-    background-color: #f8f9fa;
-    color: var(--school-primary);
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 0.05em;
-    border-bottom: 2px solid #e9ecef;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    white-space: nowrap;
-    
-    /* Sticky Header */
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
-}
-
-.custom-table tbody tr {
-    transition: background-color 0.2s;
-}
-
-.custom-table tbody tr:hover {
-    background-color: rgba(0, 33, 71, 0.03);
-}
-
-/* Minor Highlight - Refined */
-.table-minor {
-    position: relative;
-}
-
-.table-minor td:first-child {
-    border-left: 4px solid var(--school-secondary);
-}
-
-/* Badge Minor */
-.badge-minor {
-    background-color: #fff3cd;
-    color: #856404;
-    padding: 0.25em 0.6em;
-    font-size: 0.75em;
-    border-radius: 10rem;
-    margin-left: 0.5rem;
-    border: 1px solid #ffeeba;
-}
-
-/* Action Buttons */
-.btn-action {
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.2s;
-}
-
-.btn-action:hover {
-    transform: scale(1.1);
-}
-
-/* Empty State */
-#emptyState {
-    display: none; /* Toggled via JS */
-}
-
-/* Utility to ensure table is always readable on mobile via scroll */
-.table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-/* =========================================
-   Mobile Optimization (Readable Table)
-   ========================================= */
-@media (max-width: 768px) {
-    /* Stack Header Elements */
-    .card-header .d-flex {
-        flex-direction: column;
-        align-items: stretch !important;
-    }
-    
-    .card-header .d-flex .d-flex {
-        /* Reset the inner button container to row but center/stretch it */
-        flex-direction: row;
-        justify-content: space-between;
-        margin-top: 0.5rem;
-    }
-
-    #addNewBtn {
-        width: 100%;
-        margin-top: 0rem;
-    }
-
-    /* Table Compactness */
-    .custom-table th, 
-    .custom-table td {
-        padding: 0.75rem 0.5rem; /* Reduce horizontal padding */
-        font-size: 0.85rem;      /* Slightly smaller text */
-        white-space: nowrap;     /* Prevent awkward wrapping */
-    }
-
-    /* Allow Name and Course to wrap if needed for context */
-    .custom-table td:nth-child(2), /* Name */
-    .custom-table td:nth-child(4) { /* Course */
-        white-space: normal;
-        min-width: 120px;
-    }
-
-    /* Justify Course Text Specifically */
-    .custom-table td:nth-child(4) { /* Course */
-        text-align: justify;
-    }
-    
-    /* Action buttons smaller */
-    .btn-action {
-        width: 28px;
-        height: 28px;
-        font-size: 0.8rem;
-    }
-    
-    /* Adjust Badge size */
-    .badge {
-        font-weight: normal;
-        font-size: 0.7em !important;
-        white-space: normal; /* Allow badge text to wrap if needed */
-        display: inline-block;
-        line-height: 1.2;
-    }
-
-    /* Full Screen Modal on Mobile */
-    #formSection {
-        padding: 0 !important;
-        align-items: flex-end; /* Slide up or just cover */
-    }
-
-    #formSection > .row {
-        max-width: 100%;
-        margin: 0;
-        height: 100%; /* Occupy full height */
-    }
-
-    #formSection .card {
-        border-radius: 0; /* Remove corners */
-        height: 100%;
-        overflow-y: auto; /* Internal scrolling */
-        box-shadow: none;
-    }
-    
-    #formSection .card-header {
-        position: sticky;
-        top: 0;
-        background-color: white;
-        z-index: 5;
-        border-bottom: 1px solid #e9ecef;
-    }
-}
-
+.card{background:#0a1525;border:1px solid rgba(255,255,255,.07);border-radius:13px;}
+.mono{font-family:'Fira Code',monospace;}
+.sec-hd{font-family:'Fira Code',monospace;font-size:9.5px;color:#38bdf8;letter-spacing:.11em;margin-bottom:13px;text-transform:uppercase;}
