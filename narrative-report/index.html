@@ -75,7 +75,19 @@ input,textarea,select{font:inherit;color:inherit}
 .preview{display:flex;flex-direction:column;background:var(--pv);min-width:0;min-height:0}
 .bottombar,.more-btn,.zoom-btn{display:none}
 .sub-std{display:none}
-.standalone .sub-ai,.standalone #s2,.standalone .steps a[data-step="2"]{display:none}
+.standalone .sub-ai{display:none}
+body:not(.standalone) .std-only{display:none!important}
+.standalone .ai-only{display:none!important}
+.msteps{display:flex;flex-direction:column;gap:14px;border-top:1px dashed var(--ai-line);padding-top:14px}
+.mstep{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start}
+.mstep .mn{width:26px;height:26px;border-radius:50%;background:var(--gold);color:var(--gold-ink);font-weight:700;font-size:13px;display:grid;place-items:center}
+.mstep b{display:block;font-size:14.5px;margin-top:2px}
+.mstep > div{display:flex;flex-direction:column;gap:8px;min-width:0}
+.row-btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+a.sbtn{text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;padding:9px 12px}
+.mstep details summary{cursor:pointer;font-size:13px;color:var(--muted)}
+.mstep details textarea{margin-top:6px;font-size:12.5px;min-height:110px}
+.mstep textarea#pasteBox{min-height:110px}
 .standalone .sub-std{display:inline}
 .menu{position:fixed;z-index:65;top:calc(58px + env(safe-area-inset-top,0px));right:12px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.22);padding:6px;min-width:190px;display:flex;flex-direction:column}
 .menu button{border:0;background:transparent;text-align:left;padding:11px 12px;border-radius:7px;font-size:15px;font-weight:600;display:flex;align-items:center;gap:10px}
@@ -332,7 +344,7 @@ textarea.writing{background:var(--ai-bg);border-color:var(--ai-line)}
 
       <!-- 2 AI -->
       <section class="card ai-card" id="s2">
-        <div class="card-h"><div class="n">2</div><div><h2>Your notes for the AI writer</h2><p>Jot down what happened in any language: English, Tagalog, Taglish or Ilocano. The AI turns your notes into the narrative and the reflection.</p></div></div>
+        <div class="card-h"><div class="n">2</div><div><h2>Your notes for the AI writer</h2><p><span class="ai-only">Jot down what happened in any language: English, Tagalog, Taglish or Ilocano. The AI turns your notes into the narrative and the reflection.</span><span class="std-only">Jot down what happened in any language, then let Claude or ChatGPT write the narrative and reflection in three steps below.</span></p></div></div>
         <div class="stack">
           <div class="field"><label for="f-notes">What happened and what you learned</label>
             <textarea id="f-notes" data-k="notes" rows="7" placeholder="e.g., si Dr. Ramos nag-talk about stress, nag breathing exercise kami, may group sharing, natutunan ko na okay lang humingi ng tulong, gagamitin ko sa pag-manage ng time sa exams…"></textarea>
@@ -343,19 +355,31 @@ textarea.writing{background:var(--ai-bg);border-color:var(--ai-line)}
             <div class="field"><label for="f-len">Length</label>
               <select id="f-len" data-k="len"><option value="short">Short</option><option value="standard">Standard</option><option value="detailed">Detailed</option></select></div>
           </div>
-          <div class="ai-go" id="aiGo">
+          <div class="ai-go ai-only" id="aiGo">
             <button type="button" class="gobtn" id="btnAI">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.9 5.6L19.5 9.5l-5.6 1.9L12 17l-1.9-5.6L4.5 9.5l5.6-1.9z"/><path d="M19 14l.9 2.6 2.6.9-2.6.9L19 21l-.9-2.6-2.6-.9 2.6-.9z"/></svg>
               <span id="btnAITxt">Write my report</span></button>
             <span class="ai-status" id="aiStatus" role="status"></span>
           </div>
-          <div class="ai-off" id="aiOff" hidden></div>
+          <div class="ai-off ai-only" id="aiOff" hidden></div>
+          <div class="msteps std-only">
+            <div class="mstep"><span class="mn">1</span><div><b>Copy the prompt</b>
+              <span class="hint">It already has your activity details, notes, language and length.</span>
+              <div class="row-btns"><button type="button" class="gobtn" id="btnCopyPrompt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copy prompt</button></div>
+              <details><summary>Show the prompt</summary><textarea id="promptBox" readonly aria-label="Prompt to copy"></textarea></details></div></div>
+            <div class="mstep"><span class="mn">2</span><div><b>Paste it into an AI chat and send</b>
+              <span class="hint">Wait for the full answer, then copy all of it. Tap the copy button on the code box if there is one.</span>
+              <div class="row-btns"><a class="sbtn" href="https://claude.ai/new" target="_blank" rel="noopener">Open Claude</a><a class="sbtn" href="https://chatgpt.com/" target="_blank" rel="noopener">Open ChatGPT</a></div></div></div>
+            <div class="mstep"><span class="mn">3</span><div><b>Paste the answer here</b>
+              <textarea id="pasteBox" placeholder="Paste the AI's whole answer here" aria-label="AI answer"></textarea>
+              <div class="row-btns"><button type="button" class="gobtn" id="btnFill"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.9 5.6L19.5 9.5l-5.6 1.9L12 17l-1.9-5.6L4.5 9.5l5.6-1.9z"/></svg>Fill my report</button></div></div></div>
+          </div>
         </div>
       </section>
 
       <!-- 3 -->
       <section class="card" id="s3">
-        <div class="card-h"><div class="n">3</div><div><h2>Narrative</h2><p>Write each part of your report. Edit anything.</p></div></div>
+        <div class="card-h"><div class="n">3</div><div><h2>Narrative</h2><p>Filled in by the AI, or write it yourself. Edit anything.</p></div></div>
         <div class="stack">
           <div class="field"><div class="lrow"><label for="f-desc">Brief description of the activity</label><button type="button" class="aib" data-ai="description"></button></div>
             <textarea id="f-desc" data-k="description" rows="5"></textarea></div>
@@ -829,6 +853,20 @@ function refreshAIButtons(){
   if (aiState === 'connecting') $('#aiStatus').textContent = 'Connecting to the AI…';
   else if (!job) $('#aiStatus').textContent = '';
 }
+function applyResult(r){
+  const s = x => typeof x === 'string' ? x : '';
+  let n = 0;
+  AI_FIELDS.forEach(k => {
+    const val = k === 'highlights' ? (Array.isArray(r.highlights) ? r.highlights.map(s).join('\n') : s(r.highlights)) : s(r[k]);
+    if (T(val)) { M[k] = cleanText(val, k); n++; }
+  });
+  ['title','date','venue'].forEach(k => { if (!T(M[k]) && T(s(r[k]))) M[k] = T(s(r[k])); });
+  if (!M.speakers.some(x => T(x.name)) && Array.isArray(r.speakers)) {
+    const sp = r.speakers.filter(x => x && T(x.name)).map(x => ({name:T(x.name), topic:T(x.topic)}));
+    if (sp.length) M.speakers = sp;
+  }
+  return n;
+}
 async function writeAll(){
   if (job){ if (job.k === '*') job.ctl.abort(); return; }
   if (!T(M.notes) && !T(M.title)){ toast('Write a few notes about the seminar first.'); $('#f-notes').focus(); return; }
@@ -840,16 +878,7 @@ async function writeAll(){
     const r = await sample.json(promptAll(), {signal: job.ctl.signal, cache:false,
       onText: ({text}) => { st.textContent = `Writing your report… ${text.split(/\s+/).length} words so far`; }});
     if (!r || typeof r !== 'object') throw {code:'invalid_json'};
-    const s = x => typeof x === 'string' ? x : '';
-    AI_FIELDS.forEach(k => {
-      const val = k === 'highlights' ? (Array.isArray(r.highlights) ? r.highlights.map(s).join('\n') : s(r.highlights)) : s(r[k]);
-      if (T(val)) M[k] = cleanText(val, k);
-    });
-    ['title','date','venue'].forEach(k => { if (!T(M[k]) && T(s(r[k]))) M[k] = T(s(r[k])); });
-    if (!M.speakers.some(x => T(x.name)) && Array.isArray(r.speakers)) {
-      const sp = r.speakers.filter(x => x && T(x.name)).map(x => ({name:T(x.name), topic:T(x.topic)}));
-      if (sp.length) M.speakers = sp;
-    }
+    applyResult(r);
     syncForm(); render(); save();
     toast('Your report is written. Read it over and make it your own.', {label:'Undo', fn:() => { M = Object.assign(snap, {photos:M.photos, cert:M.cert}); syncForm(); render(); save(); }});
   } catch(e){ if (e && e.code !== 'cancelled'){ const m = aiMessage(e); if (m) toast(m); } }
@@ -871,12 +900,40 @@ async function writeField(k){
   } finally { ta.classList.remove('writing'); ta.readOnly = false; ta.placeholder = ph; job = null; refreshAIButtons(); }
 }
 $('#btnAI').onclick = writeAll;
+const extPrompt = () => promptAll() + '\n\nPut the JSON object inside one ```json code block and write nothing else.';
+function parseAnswer(raw){
+  let s = String(raw || '').trim(); if (!s) return null;
+  const fence = s.match(/```(?:json)?\s*([\s\S]*?)```/i); if (fence) s = fence[1];
+  const a = s.indexOf('{'), b = s.lastIndexOf('}'); if (a < 0 || b <= a) return null;
+  const j = s.slice(a, b + 1);
+  try { return JSON.parse(j); } catch(e){}
+  try { return JSON.parse(j.replace(/,\s*([}\]])/g, '$1')); } catch(e){ return null; }
+}
+$('#btnCopyPrompt').onclick = async () => {
+  if (!T(M.notes) && !T(M.title)) { toast('Write a few notes about the seminar first.'); $('#f-notes').focus(); return; }
+  const text = extPrompt(), box = $('#promptBox'); box.value = text;
+  try { await navigator.clipboard.writeText(text); toast('Prompt copied. Paste it into Claude or ChatGPT.'); }
+  catch(e){
+    box.closest('details').open = true; box.focus(); box.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch(e2){}
+    toast(ok ? 'Prompt copied. Paste it into Claude or ChatGPT.' : 'Copy the prompt in the box below.');
+  }
+};
+$('#btnFill').onclick = async () => {
+  const r = parseAnswer($('#pasteBox').value);
+  if (!r || typeof r !== 'object') { toast("Couldn't read that answer. Paste the AI's whole reply, including the part in { }."); return; }
+  if (AI_FIELDS.some(k => T(M[k])) && !(await ask('Replace the narrative and reflection?', 'The pasted answer will replace the text in the Narrative and Reflection sections. You can undo it right after.', 'Replace'))) return;
+  const snap = JSON.parse(JSON.stringify({...M, photos:[], cert:null}));
+  const n = applyResult(r);
+  if (!n) { toast("That answer didn't have the report parts in it. Copy the prompt again and paste the AI's full reply."); return; }
+  syncForm(); render(); save(); $('#pasteBox').value = '';
+  toast('Your report is filled in. Read it over and make it your own.', {label:'Undo', fn:() => { M = Object.assign(snap, {photos:M.photos, cert:M.cert}); syncForm(); render(); save(); }});
+  $('#s3').scrollIntoView({behavior:'smooth', block:'start'});
+};
 document.querySelectorAll('.aib').forEach(b => b.onclick = () => writeField(b.dataset.ai));
 (async () => {
   if (!window.claude || typeof window.claude.use !== 'function'){
     document.body.classList.add('standalone'); setAIState('off');
-    let n = 0; document.querySelectorAll('form > .card').forEach(c => { if (getComputedStyle(c).display === 'none') return; const b = c.querySelector('.card-h .n'); if (b) b.textContent = ++n; });
-    n = 0; document.querySelectorAll('.steps a').forEach(a => { if (getComputedStyle(a).display === 'none') return; a.querySelector('span').textContent = ++n; });
     return; }
   try { sample = await window.claude.use('sample'); } catch(e){ sample = null; }
   setAIState(sample ? 'ready' : 'off');
