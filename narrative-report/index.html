@@ -74,6 +74,9 @@ input,textarea,select{font:inherit;color:inherit}
 .editor{overflow-y:auto;border-right:1px solid var(--line);min-width:0}
 .preview{display:flex;flex-direction:column;background:var(--pv);min-width:0;min-height:0}
 .bottombar,.more-btn,.zoom-btn{display:none}
+.sub-std{display:none}
+.standalone .sub-ai,.standalone #s2,.standalone .steps a[data-step="2"]{display:none}
+.standalone .sub-std{display:inline}
 .menu{position:fixed;z-index:65;top:calc(58px + env(safe-area-inset-top,0px));right:12px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.22);padding:6px;min-width:190px;display:flex;flex-direction:column}
 .menu button{border:0;background:transparent;text-align:left;padding:11px 12px;border-radius:7px;font-size:15px;font-weight:600;display:flex;align-items:center;gap:10px}
 .menu button svg{width:18px;height:18px;color:var(--muted)}
@@ -280,7 +283,7 @@ textarea.writing{background:var(--ai-bg);border-color:var(--ai-line)}
 <header class="topbar">
   <div class="brand">
     <div class="mark">NR</div>
-    <div><b>Narrative Report Maker</b><small>ISCC letterhead · with an AI writer</small></div>
+    <div><b>Narrative Report Maker</b><small><span class="sub-ai">ISCC letterhead · with an AI writer</span><span class="sub-std">ISCC letterhead · PDF &amp; Word</span></small></div>
   </div>
   <button type="button" class="more-btn" id="btnMore" aria-label="More options" aria-haspopup="menu"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button>
   <div class="actions">
@@ -352,7 +355,7 @@ textarea.writing{background:var(--ai-bg);border-color:var(--ai-line)}
 
       <!-- 3 -->
       <section class="card" id="s3">
-        <div class="card-h"><div class="n">3</div><div><h2>Narrative</h2><p>Filled in by the AI, or write it yourself. Edit anything.</p></div></div>
+        <div class="card-h"><div class="n">3</div><div><h2>Narrative</h2><p>Write each part of your report. Edit anything.</p></div></div>
         <div class="stack">
           <div class="field"><div class="lrow"><label for="f-desc">Brief description of the activity</label><button type="button" class="aib" data-ai="description"></button></div>
             <textarea id="f-desc" data-k="description" rows="5"></textarea></div>
@@ -870,7 +873,11 @@ async function writeField(k){
 $('#btnAI').onclick = writeAll;
 document.querySelectorAll('.aib').forEach(b => b.onclick = () => writeField(b.dataset.ai));
 (async () => {
-  if (!window.claude || typeof window.claude.use !== 'function'){ setAIState('off'); return; }
+  if (!window.claude || typeof window.claude.use !== 'function'){
+    document.body.classList.add('standalone'); setAIState('off');
+    let n = 0; document.querySelectorAll('form > .card').forEach(c => { if (getComputedStyle(c).display === 'none') return; const b = c.querySelector('.card-h .n'); if (b) b.textContent = ++n; });
+    n = 0; document.querySelectorAll('.steps a').forEach(a => { if (getComputedStyle(a).display === 'none') return; a.querySelector('span').textContent = ++n; });
+    return; }
   try { sample = await window.claude.use('sample'); } catch(e){ sample = null; }
   setAIState(sample ? 'ready' : 'off');
 })();
