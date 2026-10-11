@@ -76,7 +76,9 @@ input,textarea,select{font:inherit;color:inherit}
 .bottombar,.more-btn,.zoom-btn{display:none}
 .sub-std{display:none}
 .standalone .sub-ai{display:none}
-body:not(.standalone) .std-only{display:none!important}
+body:not(.standalone):not(.show-copy) .std-only{display:none!important}
+body:not(.puter) .puter-only{display:none!important}
+.linkbtn{border:0;background:none;padding:0;color:var(--accent);font-weight:600;font-size:12.5px;text-decoration:underline;cursor:pointer}
 .standalone .ai-only{display:none!important}
 .msteps{display:flex;flex-direction:column;gap:14px;border-top:1px dashed var(--ai-line);padding-top:14px}
 .mstep{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start}
@@ -361,6 +363,7 @@ textarea.writing{background:var(--ai-bg);border-color:var(--ai-line)}
               <span id="btnAITxt">Write my report</span></button>
             <span class="ai-status" id="aiStatus" role="status"></span>
           </div>
+          <p class="hint puter-only" style="margin:0">Free AI by Puter. The first time, it asks you to sign in or make a free Puter account. <button type="button" class="linkbtn" id="btnShowCopy">Use Copy prompt instead</button></p>
           <div class="ai-off ai-only" id="aiOff" hidden></div>
           <div class="msteps std-only">
             <div class="mstep"><span class="mn">1</span><div><b>Copy the prompt</b>
@@ -824,6 +827,7 @@ function aiMessage(e){
     case 'not_granted': case 'sampling_disabled': case 'not_declared': case 'capability_disabled': case 'capability_removed':
       setAIState('off', "AI writing wasn't allowed for this page, so you can type your report yourself. To turn it on, reopen the page and allow Claude when asked."); return null;
     case 'rate_limited': return 'Too many requests right now. Wait a minute, then try again.';
+    case 'puter_failed': document.body.classList.add('show-copy'); return "The free AI couldn't answer. You may need to finish signing in to Puter. Try again, or use the Copy prompt steps below.";
     case 'server_off': document.body.classList.add('standalone'); setAIState('off'); return "The AI server isn't available right now, so use the Copy prompt steps in section 2 instead.";
     case 'session_expired': return 'Your Claude session expired. Sign in again, then try again.';
     case 'refused': return "The AI couldn't write this. Try rewording your notes.";
@@ -867,6 +871,49 @@ function makeServerSample(url){
     if (!res.ok || !T(j.text)) throw {code: res.ok ? 'empty_completion' : 'upstream_error'};
     if (opts.onText) opts.onText({text: j.text, delta: j.text});
     return {text: j.text, truncated: !!j.truncated};
+  };
+  call.json = async (input, opts) => { const {text} = await call(input, opts); const v = parseAnswer(text); if (!v || typeof v !== 'object') throw {code:'invalid_json', text}; return v; };
+  return call;
+}
+function loadPuter(){
+  return new Promise(res => {
+    if (window.puter && window.puter.ai) return res(true);
+    const s = document.createElement('script'); s.src = 'https://js.puter.com/v2/'; s.async = true;
+    const to = setTimeout(() => res(false), 12000);
+    s.onload = () => { clearTimeout(to); res(true); }; s.onerror = () => { clearTimeout(to); res(false); };
+    document.head.appendChild(s);
+  });
+}
+function withSignal(promise, signal){
+  if (!signal) return promise;
+  if (signal.aborted) return Promise.reject({code:'cancelled'});
+  return new Promise((res, rej) => {
+    const stop = () => rej({code:'cancelled'}); signal.addEventListener('abort', stop, {once:true});
+    promise.then(v => { signal.removeEventListener('abort', stop); res(v); }, e => { signal.removeEventListener('abort', stop); rej(e); });
+  });
+}
+function puterText(r){
+  if (!r) return '';
+  if (typeof r === 'string') return r;
+  const c = (r.message && r.message.content != null) ? r.message.content : r.content;
+  if (typeof c === 'string') return c;
+  if (Array.isArray(c)) return c.map(x => typeof x === 'string' ? x : (x && x.text) || '').join('');
+  if (typeof r.text === 'string') return r.text;
+  const s = String(r); return s === '[object Object]' ? '' : s;
+}
+function makePuterSample(){
+  const call = async (input, opts = {}) => {
+    const ask = o => withSignal(Promise.resolve().then(() => window.puter.ai.chat(String(input), o)), opts.signal);
+    let resp;
+    try { resp = await ask({model:'anthropic/claude-sonnet-5'}); }
+    catch(e){
+      if (e && e.code === 'cancelled') throw e;
+      try { resp = await ask({}); } catch(e2){ if (e2 && e2.code === 'cancelled') throw e2; console.warn('Puter AI failed', e2); throw {code:'puter_failed'}; }
+    }
+    const text = puterText(resp);
+    if (!T(text)) throw {code:'empty_completion'};
+    if (opts.onText) opts.onText({text, delta: text});
+    return {text, truncated: false};
   };
   call.json = async (input, opts) => { const {text} = await call(input, opts); const v = parseAnswer(text); if (!v || typeof v !== 'object') throw {code:'invalid_json', text}; return v; };
   return call;
@@ -918,6 +965,7 @@ async function writeField(k){
   } finally { ta.classList.remove('writing'); ta.readOnly = false; ta.placeholder = ph; job = null; refreshAIButtons(); }
 }
 $('#btnAI').onclick = writeAll;
+$('#btnShowCopy').onclick = () => { document.body.classList.add('show-copy'); document.querySelector('.msteps').scrollIntoView({behavior:'smooth', block:'start'}); };
 const extPrompt = () => promptAll() + '\n\nPut the JSON object inside one ```json code block and write nothing else.';
 function parseAnswer(raw){
   let s = String(raw || '').trim(); if (!s) return null;
@@ -953,6 +1001,10 @@ document.querySelectorAll('.aib').forEach(b => b.onclick = () => writeField(b.da
   if (!window.claude || typeof window.claude.use !== 'function'){
     if (/^https:\/\//.test(AI_URL)) { sample = makeServerSample(AI_URL); setAIState('ready'); return; }
     document.body.classList.add('standalone'); setAIState('off');
+    loadPuter().then(ok => {
+      if (!ok || !(window.puter && window.puter.ai && typeof window.puter.ai.chat === 'function')) return;
+      sample = makePuterSample(); document.body.classList.remove('standalone'); document.body.classList.add('puter'); setAIState('ready');
+    });
     return; }
   try { sample = await window.claude.use('sample'); } catch(e){ sample = null; }
   setAIState(sample ? 'ready' : 'off');
